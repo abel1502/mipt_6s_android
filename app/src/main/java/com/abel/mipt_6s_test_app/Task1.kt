@@ -2,13 +2,14 @@ package com.abel.mipt_6s_test_app
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -45,12 +46,15 @@ fun Task1() {
             )
             Task1Title()
             Text(
-                modifier = Modifier,
-                text = "Deliver Favorite Food",
-                fontFamily = FontFamily(Font(R.font.inter)),
-                fontSize = 13.sp,
-                fontWeight = FontWeight(600),
+                modifier = Modifier
+                    .padding(top = 65.dp),
+                text = "Sign Up For Free",
+                fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
+                fontSize = 20.sp,
+                fontWeight = FontWeight(400),
+                lineHeight = 26.2.sp,
             )
+            Task1Fields()
         }
         Task1Background()
     }
@@ -98,7 +102,28 @@ fun Task1Title() {
         fontSize = 40.sp,
         // fontWeight = FontWeight(400),
         color = Color.Black,
+        lineHeight = 53.76.sp,
+        letterSpacing = 0.5.sp,
     )
+    Text(
+        modifier = Modifier
+            .offset(y = (-6).dp),
+        text = "Deliver Favorite Food",
+        fontFamily = FontFamily(Font(R.font.inter)),
+        fontSize = 13.sp,
+        fontWeight = FontWeight(600),
+        lineHeight = 15.73.sp,
+        letterSpacing = 1.sp,
+    )
+}
+
+@Composable
+fun Task1Fields() {
+//    var strLogin by remember { mutableStateOf("") };
+//
+//    TextField(
+//
+//    )
 }
 
 @Preview(showBackground = true)
