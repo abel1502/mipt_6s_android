@@ -2,7 +2,7 @@ package com.abel.mipt_6s_test_app
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -97,7 +96,8 @@ fun Task1() {
             }
             Text(
                 modifier = Modifier
-                    .padding(top = 20.dp),
+                    .padding(top = 20.dp)
+                    .clickable { /* TODO */ },
                 text = "already have an account?",
                 fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
                 fontSize = 12.sp,
