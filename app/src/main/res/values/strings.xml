@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">Test App</string>
+    <string name="app_name" translatable="false">FoodNinja</string>
+    <string name="app_motto">Deliver Favorite Food</string>
+    <string name="sign_up_for_free">Sign Up For Free</string>
+    <string name="keep_me_signed_in">Keep Me Signed In</string>
+    <string name="email_me">Email Me About Special Pricing</string>
+    <string name="create_account">Create Account</string>
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_email">Email</string>
+    <string name="placeholder_password">Password</string>
+    <string name="already_have_an_account">already have an account?</string>
 </resources>

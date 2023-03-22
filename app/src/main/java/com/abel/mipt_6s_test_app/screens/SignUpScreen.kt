@@ -1,3 +1,5 @@
+// Task 1
+
 package com.abel.mipt_6s_test_app
 
 import androidx.compose.foundation.Image
@@ -18,10 +20,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -30,44 +31,50 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.abel.mipt_6s_test_app.ui.theme.GreenBright
+import com.abel.mipt_6s_test_app.ui.theme.GreenGradientBrush
 import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
 
+
 @Composable
-fun Task1() {
+fun SignUpScreen() {
     Card(
         modifier = Modifier
             .fillMaxHeight()
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(top = 49.dp, bottom = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Image(
                 modifier = Modifier
-                    .padding(top = 49.dp)
                     .size(width = 179.dp, height = 135.dp),
                 painter = painterResource(id = R.drawable.task1_logo),
                 contentDescription = "Logo",
                 alignment = Alignment.TopCenter,
             )
-            Task1Title()
+            HelperTitle()
             Spacer(
                 modifier = Modifier
-                    .height(65.dp)
+                    .weight(3.0f)
             )
             Text(
                 modifier = Modifier,
-                text = "Sign Up For Free",
+                text = stringResource(R.string.sign_up_for_free),
                 fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
                 fontSize = 20.sp,
                 fontWeight = FontWeight(400),
                 lineHeight = 26.2.sp,
             )
-            Task1Fields()
+            HelperFields()
+            Spacer(
+                modifier = Modifier
+                    .weight(1.0f)
+            )
             Button(
                 modifier = Modifier
-                    .padding(top = 37.dp)
                     .size(width = 175.dp, height = 57.dp),
                 onClick = { /* TODO */ },
                 colors = ButtonDefaults.buttonColors(
@@ -80,15 +87,12 @@ fun Task1() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            brush = Brush.horizontalGradient(
-                                0f to Color(0xFF53E88B),
-                                1f to Color(0xFF15BE77),
-                            )
+                            brush = GreenGradientBrush
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "Create Account",
+                        text = stringResource(R.string.create_account),
                         fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
                         fontSize = 16.sp,
                         fontWeight = FontWeight(400),
@@ -101,21 +105,22 @@ fun Task1() {
                 modifier = Modifier
                     .padding(top = 20.dp)
                     .clickable { /* TODO */ },
-                text = "already have an account?",
+                text = stringResource(R.string.already_have_an_account),
                 fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
                 fontSize = 12.sp,
                 fontWeight = FontWeight(400),
                 lineHeight = 19.98.sp,
-                color = Color(0xFF53E88B),
+                color = GreenBright,
                 textDecoration = TextDecoration.Underline,
             )
         }
-        Task1Background()
+        HelperBackground()
     }
 }
 
+// region Helpers
 @Composable
-fun Task1Background() {
+private fun HelperBackground() {
     Image(
         modifier = Modifier
             .graphicsLayer { alpha = 0.99f }
@@ -138,20 +143,17 @@ fun Task1Background() {
 }
 
 @Composable
-fun Task1Title() {
+private fun HelperTitle() {
     Text(
         modifier = Modifier
             .drawWithContent {
                 drawContent()
                 drawRect(
-                    brush = Brush.horizontalGradient(
-                        0f to Color(0xFF53E88B),
-                        1f to Color(0xFF15BE77),
-                    ),
+                    brush = GreenGradientBrush,
                     blendMode = BlendMode.Lighten,
                 )
             },
-        text = "FoodNinja",
+        text = stringResource(R.string.app_name),
         fontFamily = FontFamily(Font(R.font.viga)),
         fontSize = 40.sp,
         // fontWeight = FontWeight(400),
@@ -162,7 +164,7 @@ fun Task1Title() {
     Text(
         modifier = Modifier
             .offset(y = (-6).dp),
-        text = "Deliver Favorite Food",
+        text = stringResource(R.string.app_motto),
         fontFamily = FontFamily(Font(R.font.inter)),
         fontSize = 13.sp,
         fontWeight = FontWeight(600),
@@ -172,7 +174,7 @@ fun Task1Title() {
 }
 
 @Composable
-fun Task1Fields() {
+private fun HelperFields() {
     var nameValue by remember { mutableStateOf("") }
     var emailValue by remember { mutableStateOf("") }
     var passwordValue by remember { mutableStateOf("") }
@@ -186,8 +188,6 @@ fun Task1Fields() {
         placeholderColor = Color(0x663B3B3B),
     )
 
-    val themeColor = Color(0xFF53E88B)
-
     // region TextFields
     TextField(
         modifier = Modifier
@@ -195,13 +195,13 @@ fun Task1Fields() {
             .size(width = 325.dp, height = 57.dp),
         value = nameValue,
         onValueChange = { nameValue = it },
-        placeholder = { Text("Name") },
+        placeholder = { Text(stringResource(R.string.placeholder_name)) },
         colors = colors,
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Person,
                 contentDescription = "Person icon",
-                tint = themeColor,
+                tint = GreenBright,
             )
         },
     )
@@ -211,13 +211,13 @@ fun Task1Fields() {
             .size(width = 325.dp, height = 57.dp),
         value = emailValue,
         onValueChange = { emailValue = it },
-        placeholder = { Text("Email") },
+        placeholder = { Text(stringResource(R.string.placeholder_email)) },
         colors = colors,
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Email,
                 contentDescription = "Email icon",
-                tint = themeColor,
+                tint = GreenBright,
             )
         },
     )
@@ -227,7 +227,7 @@ fun Task1Fields() {
             .size(width = 325.dp, height = 57.dp),
         value = passwordValue,
         onValueChange = { passwordValue = it },
-        placeholder = { Text("Password") },
+        placeholder = { Text(stringResource(R.string.placeholder_password)) },
         colors = colors,
         visualTransformation = if (passwordShown) VisualTransformation.None
             else PasswordVisualTransformation(),
@@ -238,7 +238,7 @@ fun Task1Fields() {
             Icon(
                 imageVector = Icons.Filled.Lock,
                 contentDescription = "Lock icon",
-                tint = themeColor,
+                tint = GreenBright,
             )
         },
         trailingIcon = {
@@ -277,13 +277,13 @@ fun Task1Fields() {
                 checked = keepSignedInValue,
                 onCheckedChange = { keepSignedInValue = it },
                 colors = CheckboxDefaults.colors(
-                    checkedColor = themeColor,
+                    checkedColor = GreenBright,
                 ),
             )
             Text(
                 modifier = Modifier
                     .padding(start = 8.dp),
-                text = "Keep Me Signed In",
+                text = stringResource(R.string.keep_me_signed_in),
                 fontFamily = FontFamily(Font(R.font.inter)),
                 fontSize = 12.sp,
                 fontWeight = FontWeight(400),
@@ -301,13 +301,13 @@ fun Task1Fields() {
                 checked = emailMeValue,
                 onCheckedChange = { emailMeValue = it },
                 colors = CheckboxDefaults.colors(
-                    checkedColor = themeColor,
+                    checkedColor = GreenBright,
                 ),
             )
             Text(
                 modifier = Modifier
                     .padding(start = 8.dp),
-                text = "Email Me About Special Pricing",
+                text = stringResource(R.string.email_me),
                 fontFamily = FontFamily(Font(R.font.inter)),
                 fontSize = 12.sp,
                 fontWeight = FontWeight(400),
@@ -318,11 +318,12 @@ fun Task1Fields() {
     }
     // endregion
 }
+// endregion Helpers
 
 @Preview(showBackground = true)
 @Composable
 fun Task1Preview() {
     TestAppTheme {
-        Task1()
+        SignUpScreen()
     }
 }
