@@ -1,6 +1,4 @@
-// Task 1
-
-package com.abel.mipt_6s_test_app
+package com.abel.mipt_6s_test_app.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,94 +29,59 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.abel.mipt_6s_test_app.R
 import com.abel.mipt_6s_test_app.ui.theme.GreenBright
 import com.abel.mipt_6s_test_app.ui.theme.GreenGradientBrush
 import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
 
 
+val LocalViewModel = staticCompositionLocalOf { SignUpViewModel() }
+val LocalViewState = staticCompositionLocalOf { SignUpViewState() }
+
 @Composable
 fun SignUpScreen() {
-    Card(
-        modifier = Modifier
-            .fillMaxHeight()
+    val viewModel: SignUpViewModel = viewModel()
+    val viewState by viewModel.viewState.collectAsState()
+
+    CompositionLocalProvider(
+        LocalViewModel provides viewModel,
+        LocalViewState provides viewState,
     ) {
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 49.dp, bottom = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+                .fillMaxHeight()
         ) {
-            Image(
-                modifier = Modifier
-                    .size(width = 179.dp, height = 135.dp),
-                painter = painterResource(id = R.drawable.task1_logo),
-                contentDescription = "Logo",
-                alignment = Alignment.TopCenter,
-            )
-            HelperTitle()
-            Spacer(
-                modifier = Modifier
-                    .weight(3.0f)
-            )
-            Text(
-                modifier = Modifier,
-                text = stringResource(R.string.sign_up_for_free),
-                fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
-                fontSize = 20.sp,
-                fontWeight = FontWeight(400),
-                lineHeight = 26.2.sp,
-            )
-            HelperFields()
-            Spacer(
-                modifier = Modifier
-                    .weight(1.0f)
-            )
-            Button(
-                modifier = Modifier
-                    .size(width = 175.dp, height = 57.dp),
-                onClick = { /* TODO */ },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color.Transparent
-                ),
-                contentPadding = PaddingValues(0.dp),
-                shape = RoundedCornerShape(15.dp),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = GreenGradientBrush
-                        ),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(R.string.create_account),
-                        fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight(400),
-                        lineHeight = 20.96.sp,
-                        color = Color.White,
-                    )
-                }
-            }
-            Text(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .clickable { /* TODO */ },
-                text = stringResource(R.string.already_have_an_account),
-                fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
-                fontSize = 12.sp,
-                fontWeight = FontWeight(400),
-                lineHeight = 19.98.sp,
-                color = GreenBright,
-                textDecoration = TextDecoration.Underline,
-            )
+            HelperContent()
         }
-        HelperBackground()
     }
 }
 
 // region Helpers
+@Composable
+private fun HelperContent() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 49.dp, bottom = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        HelperLogo()
+        HelperTitle()
+        Spacer(
+            modifier = Modifier
+                .weight(3.0f)
+        )
+        HelperFields()
+        Spacer(
+            modifier = Modifier
+                .weight(1.0f)
+        )
+        HelperSubmit()
+    }
+    HelperBackground()
+}
+
 @Composable
 private fun HelperBackground() {
     Image(
@@ -138,6 +101,17 @@ private fun HelperBackground() {
             },
         painter = painterResource(id = R.drawable.task1_bg_pattern),
         contentDescription = "Background pattern",
+        alignment = Alignment.TopCenter,
+    )
+}
+
+@Composable
+private fun HelperLogo() {
+    Image(
+        modifier = Modifier
+            .size(width = 179.dp, height = 135.dp),
+        painter = painterResource(id = R.drawable.task1_logo),
+        contentDescription = "Logo",
         alignment = Alignment.TopCenter,
     )
 }
@@ -175,17 +149,21 @@ private fun HelperTitle() {
 
 @Composable
 private fun HelperFields() {
-    var nameValue by remember { mutableStateOf("") }
-    var emailValue by remember { mutableStateOf("") }
-    var passwordValue by remember { mutableStateOf("") }
-    var keepSignedInValue by remember { mutableStateOf(true) }
-    var emailMeValue by remember { mutableStateOf(true) }
-
-    var passwordShown by remember { mutableStateOf(false) }
+    val viewModel = LocalViewModel.current
+    val viewState = LocalViewState.current
 
     val colors = TextFieldDefaults.textFieldColors(
         backgroundColor = Color(0xFFFFFFFF),
         placeholderColor = Color(0x663B3B3B),
+    )
+
+    Text(
+        modifier = Modifier,
+        text = stringResource(R.string.sign_up_for_free),
+        fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
+        fontSize = 20.sp,
+        fontWeight = FontWeight(400),
+        lineHeight = 26.2.sp,
     )
 
     // region TextFields
@@ -193,8 +171,8 @@ private fun HelperFields() {
         modifier = Modifier
             .padding(top = 40.dp)
             .size(width = 325.dp, height = 57.dp),
-        value = nameValue,
-        onValueChange = { nameValue = it },
+        value = viewState.login,
+        onValueChange = { viewModel.obtainEvent(SignUpEvent.LoginChanged(it)) },
         placeholder = { Text(stringResource(R.string.placeholder_name)) },
         colors = colors,
         leadingIcon = {
@@ -209,8 +187,8 @@ private fun HelperFields() {
         modifier = Modifier
             .padding(top = 12.dp)
             .size(width = 325.dp, height = 57.dp),
-        value = emailValue,
-        onValueChange = { emailValue = it },
+        value = viewState.email,
+        onValueChange = { viewModel.obtainEvent(SignUpEvent.EmailChanged(it)) },
         placeholder = { Text(stringResource(R.string.placeholder_email)) },
         colors = colors,
         leadingIcon = {
@@ -225,11 +203,11 @@ private fun HelperFields() {
         modifier = Modifier
             .padding(top = 12.dp)
             .size(width = 325.dp, height = 57.dp),
-        value = passwordValue,
-        onValueChange = { passwordValue = it },
+        value = viewState.password,
+        onValueChange = { viewModel.obtainEvent(SignUpEvent.PasswordChanged(it)) },
         placeholder = { Text(stringResource(R.string.placeholder_password)) },
         colors = colors,
-        visualTransformation = if (passwordShown) VisualTransformation.None
+        visualTransformation = if (viewState.passwordShown) VisualTransformation.None
             else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
@@ -242,14 +220,14 @@ private fun HelperFields() {
             )
         },
         trailingIcon = {
-            val image = if (passwordShown) Icons.Filled.Visibility
+            val image = if (viewState.passwordShown) Icons.Filled.Visibility
                 else Icons.Filled.VisibilityOff
 
-            val description = if (passwordShown) "Hide password"
+            val description = if (viewState.passwordShown) "Hide password"
                 else "Show password"
 
             IconButton(
-                onClick = { passwordShown = !passwordShown}
+                onClick = { viewModel.obtainEvent(SignUpEvent.PasswordShownChanged) }
             ){
                 Icon(
                     imageVector = image,
@@ -274,8 +252,8 @@ private fun HelperFields() {
         ) {
             Checkbox(
                 modifier = Modifier,
-                checked = keepSignedInValue,
-                onCheckedChange = { keepSignedInValue = it },
+                checked = viewState.keepSignedIn,
+                onCheckedChange = { viewModel.obtainEvent(SignUpEvent.KeepSignedInChanged(it)) },
                 colors = CheckboxDefaults.colors(
                     checkedColor = GreenBright,
                 ),
@@ -298,8 +276,8 @@ private fun HelperFields() {
         ) {
             Checkbox(
                 modifier = Modifier,
-                checked = emailMeValue,
-                onCheckedChange = { emailMeValue = it },
+                checked = viewState.emailMe,
+                onCheckedChange = { viewModel.obtainEvent(SignUpEvent.EmailMeChanged(it)) },
                 colors = CheckboxDefaults.colors(
                     checkedColor = GreenBright,
                 ),
@@ -317,6 +295,52 @@ private fun HelperFields() {
         }
     }
     // endregion
+}
+
+@Composable
+private fun HelperSubmit() {
+    val viewModel = LocalViewModel.current
+
+    Button(
+        modifier = Modifier
+            .size(width = 175.dp, height = 57.dp),
+        onClick = { viewModel.obtainEvent(SignUpEvent.Submit) },
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Color.Transparent
+        ),
+        contentPadding = PaddingValues(0.dp),
+        shape = RoundedCornerShape(15.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = GreenGradientBrush
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = stringResource(R.string.create_account),
+                fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
+                fontSize = 16.sp,
+                fontWeight = FontWeight(400),
+                lineHeight = 20.96.sp,
+                color = Color.White,
+            )
+        }
+    }
+    Text(
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .clickable { viewModel.obtainEvent(SignUpEvent.AlreadyHaveAccount) },
+        text = stringResource(R.string.already_have_an_account),
+        fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
+        fontSize = 12.sp,
+        fontWeight = FontWeight(400),
+        lineHeight = 19.98.sp,
+        color = GreenBright,
+        textDecoration = TextDecoration.Underline,
+    )
 }
 // endregion Helpers
 

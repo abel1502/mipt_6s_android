@@ -6,8 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.abel.mipt_6s_test_app.screens.SignUpScreen
 import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
 
 class MainActivity : ComponentActivity() {
