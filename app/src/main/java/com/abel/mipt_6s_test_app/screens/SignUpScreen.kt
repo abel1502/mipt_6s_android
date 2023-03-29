@@ -41,47 +41,47 @@ fun SignUpScreen() {
     val viewModel: SignUpViewModel = viewModel()
     val viewState by viewModel.viewState.collectAsState()
 
-    Card(
-        modifier = Modifier
-            .fillMaxHeight()
-    ) {
-        HelperContent(
-            viewState,
-            eventHandler = { viewModel.obtainEvent(it) },
-        )
-    }
+    SignUpView(
+        viewState,
+        eventHandler = { viewModel.obtainEvent(it) },
+    )
 }
 
 // region Helpers
 @Composable
-private fun HelperContent(
+private fun SignUpView(
     viewState: SignUpViewState,
     eventHandler: (SignUpEvent) -> Unit,
 ) {
-    Column(
+    Card(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 49.dp, bottom = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .fillMaxHeight()
     ) {
-        HelperLogo()
-        HelperTitle()
-        Spacer(
+        Column(
             modifier = Modifier
-                .weight(3.0f)
-        )
-        HelperFields(viewState, eventHandler)
-        Spacer(
-            modifier = Modifier
-                .weight(1.0f)
-        )
-        HelperSubmit(eventHandler)
+                .fillMaxSize()
+                .padding(top = 49.dp, bottom = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            SignUpLogo()
+            SignUpTitle()
+            Spacer(
+                modifier = Modifier
+                    .weight(3.0f)
+            )
+            SignUpFields(viewState, eventHandler)
+            Spacer(
+                modifier = Modifier
+                    .weight(1.0f)
+            )
+            SignUpSubmit(eventHandler)
+        }
+        SignUpBackground()
     }
-    HelperBackground()
 }
 
 @Composable
-private fun HelperBackground() {
+private fun SignUpBackground() {
     Image(
         modifier = Modifier
             .graphicsLayer { alpha = 0.99f }
@@ -104,7 +104,7 @@ private fun HelperBackground() {
 }
 
 @Composable
-private fun HelperLogo() {
+private fun SignUpLogo() {
     Image(
         modifier = Modifier
             .size(width = 179.dp, height = 135.dp),
@@ -115,7 +115,7 @@ private fun HelperLogo() {
 }
 
 @Composable
-private fun HelperTitle() {
+private fun SignUpTitle() {
     Text(
         modifier = Modifier
             .drawWithContent {
@@ -146,7 +146,7 @@ private fun HelperTitle() {
 }
 
 @Composable
-private fun HelperFields(
+private fun SignUpFields(
     viewState: SignUpViewState,
     eventHandler: (SignUpEvent) -> Unit,
 ) {
@@ -234,7 +234,7 @@ private fun HelperFields(
             }
         },
     )
-    // endregion
+    // endregion TextFields
 
     // region Checkboxes
     Column(
@@ -292,11 +292,11 @@ private fun HelperFields(
             )
         }
     }
-    // endregion
+    // endregion Checkboxes
 }
 
 @Composable
-private fun HelperSubmit(
+private fun SignUpSubmit(
     eventHandler: (SignUpEvent) -> Unit,
 ) {
     Button(
