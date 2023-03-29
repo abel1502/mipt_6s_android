@@ -36,30 +36,28 @@ import com.abel.mipt_6s_test_app.ui.theme.GreenGradientBrush
 import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
 
 
-val LocalViewModel = staticCompositionLocalOf { SignUpViewModel() }
-val LocalViewState = staticCompositionLocalOf { SignUpViewState() }
-
 @Composable
 fun SignUpScreen() {
     val viewModel: SignUpViewModel = viewModel()
     val viewState by viewModel.viewState.collectAsState()
 
-    CompositionLocalProvider(
-        LocalViewModel provides viewModel,
-        LocalViewState provides viewState,
+    Card(
+        modifier = Modifier
+            .fillMaxHeight()
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxHeight()
-        ) {
-            HelperContent()
-        }
+        HelperContent(
+            viewState,
+            eventHandler = { viewModel.obtainEvent(it) },
+        )
     }
 }
 
 // region Helpers
 @Composable
-private fun HelperContent() {
+private fun HelperContent(
+    viewState: SignUpViewState,
+    eventHandler: (SignUpEvent) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,12 +70,12 @@ private fun HelperContent() {
             modifier = Modifier
                 .weight(3.0f)
         )
-        HelperFields()
+        HelperFields(viewState, eventHandler)
         Spacer(
             modifier = Modifier
                 .weight(1.0f)
         )
-        HelperSubmit()
+        HelperSubmit(eventHandler)
     }
     HelperBackground()
 }
@@ -148,10 +146,10 @@ private fun HelperTitle() {
 }
 
 @Composable
-private fun HelperFields() {
-    val viewModel = LocalViewModel.current
-    val viewState = LocalViewState.current
-
+private fun HelperFields(
+    viewState: SignUpViewState,
+    eventHandler: (SignUpEvent) -> Unit,
+) {
     val colors = TextFieldDefaults.textFieldColors(
         backgroundColor = Color(0xFFFFFFFF),
         placeholderColor = Color(0x663B3B3B),
@@ -172,7 +170,7 @@ private fun HelperFields() {
             .padding(top = 40.dp)
             .size(width = 325.dp, height = 57.dp),
         value = viewState.login,
-        onValueChange = { viewModel.obtainEvent(SignUpEvent.LoginChanged(it)) },
+        onValueChange = { eventHandler(SignUpEvent.LoginChanged(it)) },
         placeholder = { Text(stringResource(R.string.placeholder_name)) },
         colors = colors,
         leadingIcon = {
@@ -188,7 +186,7 @@ private fun HelperFields() {
             .padding(top = 12.dp)
             .size(width = 325.dp, height = 57.dp),
         value = viewState.email,
-        onValueChange = { viewModel.obtainEvent(SignUpEvent.EmailChanged(it)) },
+        onValueChange = { eventHandler(SignUpEvent.EmailChanged(it)) },
         placeholder = { Text(stringResource(R.string.placeholder_email)) },
         colors = colors,
         leadingIcon = {
@@ -204,7 +202,7 @@ private fun HelperFields() {
             .padding(top = 12.dp)
             .size(width = 325.dp, height = 57.dp),
         value = viewState.password,
-        onValueChange = { viewModel.obtainEvent(SignUpEvent.PasswordChanged(it)) },
+        onValueChange = { eventHandler(SignUpEvent.PasswordChanged(it)) },
         placeholder = { Text(stringResource(R.string.placeholder_password)) },
         colors = colors,
         visualTransformation = if (viewState.passwordShown) VisualTransformation.None
@@ -227,7 +225,7 @@ private fun HelperFields() {
                 else "Show password"
 
             IconButton(
-                onClick = { viewModel.obtainEvent(SignUpEvent.PasswordShownChanged) }
+                onClick = { eventHandler(SignUpEvent.PasswordShownChanged) }
             ){
                 Icon(
                     imageVector = image,
@@ -253,7 +251,7 @@ private fun HelperFields() {
             Checkbox(
                 modifier = Modifier,
                 checked = viewState.keepSignedIn,
-                onCheckedChange = { viewModel.obtainEvent(SignUpEvent.KeepSignedInChanged(it)) },
+                onCheckedChange = { eventHandler(SignUpEvent.KeepSignedInChanged(it)) },
                 colors = CheckboxDefaults.colors(
                     checkedColor = GreenBright,
                 ),
@@ -277,7 +275,7 @@ private fun HelperFields() {
             Checkbox(
                 modifier = Modifier,
                 checked = viewState.emailMe,
-                onCheckedChange = { viewModel.obtainEvent(SignUpEvent.EmailMeChanged(it)) },
+                onCheckedChange = { eventHandler(SignUpEvent.EmailMeChanged(it)) },
                 colors = CheckboxDefaults.colors(
                     checkedColor = GreenBright,
                 ),
@@ -298,13 +296,13 @@ private fun HelperFields() {
 }
 
 @Composable
-private fun HelperSubmit() {
-    val viewModel = LocalViewModel.current
-
+private fun HelperSubmit(
+    eventHandler: (SignUpEvent) -> Unit,
+) {
     Button(
         modifier = Modifier
             .size(width = 175.dp, height = 57.dp),
-        onClick = { viewModel.obtainEvent(SignUpEvent.Submit) },
+        onClick = { eventHandler(SignUpEvent.Submit) },
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color.Transparent
         ),
@@ -332,7 +330,7 @@ private fun HelperSubmit() {
     Text(
         modifier = Modifier
             .padding(top = 20.dp)
-            .clickable { viewModel.obtainEvent(SignUpEvent.AlreadyHaveAccount) },
+            .clickable { eventHandler(SignUpEvent.AlreadyHaveAccount) },
         text = stringResource(R.string.already_have_an_account),
         fontFamily = FontFamily(Font(R.font.benton_sans_bold, FontWeight.Bold)),
         fontSize = 12.sp,
