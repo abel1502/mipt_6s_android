@@ -8,7 +8,9 @@ import io.ktor.http.URLBuilder
 import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(private val httpClient: HttpClient) {
-    val API_URL = "http://195.2.84.138:8081/catalog"
+    companion object {
+        private const val API_URL = "http://195.2.84.138:8081/catalog"
+    }
 
     suspend fun fetchCatalog(): CatalogResponse {
         return httpClient.request(API_URL) {

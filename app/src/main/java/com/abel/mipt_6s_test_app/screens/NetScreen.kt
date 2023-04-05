@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,40 +31,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import com.abel.mipt_6s_test_app.net.RemoteCommercial
-import com.abel.mipt_6s_test_app.net.RemoteRestaurant
+import com.abel.mipt_6s_test_app.R
 import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
-
-
-data class Restaurant(
-    val name: String,
-    val deliveryTime: String,
-    val image: String,
-) {
-    companion object {
-        fun fromRemote(remote: RemoteRestaurant): Restaurant {
-            return Restaurant(
-                name = remote.name,
-                deliveryTime = remote.deliveryTime,
-                image = remote.image,
-            )
-        }
-    }
-}
-
-data class Commercial(
-    val picture: String,
-    val url: String,
-) {
-    companion object {
-        fun fromRemote(remote: RemoteCommercial): Commercial {
-            return Commercial(
-                picture = remote.picture,
-                url = remote.url,
-            )
-        }
-    }
-}
 
 
 @Composable
@@ -116,7 +85,10 @@ fun NetView(
             )
             Text(
                 modifier = Modifier,
-                text = if (viewState.curSection == NetViewState.Section.POPULAR) "Popular" else "Nearest",
+                text = if (viewState.curSection == NetViewState.Section.POPULAR)
+                    stringResource(id = R.string.restaurants_popular)
+                else
+                    stringResource(id = R.string.restaurants_nearest),
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 maxLines = 1,

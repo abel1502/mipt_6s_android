@@ -9,4 +9,6 @@
     <string name="placeholder_email">Email</string>
     <string name="placeholder_password">Password</string>
     <string name="already_have_an_account">already have an account?</string>
+    <string name="restaurants_popular">Popular</string>
+    <string name="restaurants_nearest">Nearest</string>
 </resources>
