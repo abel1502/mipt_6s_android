@@ -21,7 +21,7 @@ data class RestaurantEntity(
 
 fun RemoteRestaurant.toRestaurantEntity(category: String): RestaurantEntity =
     RestaurantEntity(
-        id = id,
+        id = id + (if (category == "nearest") 1000 else 0),
         name = name,
         logo = image,
         deliveryTime = deliveryTime,
@@ -30,7 +30,7 @@ fun RemoteRestaurant.toRestaurantEntity(category: String): RestaurantEntity =
 
 fun RestaurantEntity.toRemoteRestaurant(): RemoteRestaurant =
     RemoteRestaurant(
-        id = id,
+        id = id - (if (category == "nearest") 1000 else 0),
         name = name,
         image = logo,
         deliveryTime = deliveryTime,

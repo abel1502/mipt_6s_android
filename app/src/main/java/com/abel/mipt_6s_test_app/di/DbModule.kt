@@ -16,7 +16,7 @@ class DbModule {
     fun database(@ApplicationContext context: Context): AppDatabase = Room.databaseBuilder(
         context,
         AppDatabase::class.java, "food_delivery"
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     @Provides
     fun restaurantDao(db: AppDatabase) = db.restaurantDao()
