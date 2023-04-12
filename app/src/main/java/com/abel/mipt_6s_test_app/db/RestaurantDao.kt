@@ -7,8 +7,8 @@ import androidx.room.Query
 
 @Dao
 interface RestaurantDao {
-    @Query("SELECT count(*) FROM restaurants LIMIT 1")
-    fun isEmpty(): Boolean
+    @Query("SELECT count(*) FROM commercial LIMIT 1")
+    fun isNonEmpty(): Boolean
 
     @Query("SELECT * FROM restaurants")
     fun getAllRestaurants(): List<RestaurantEntity>
