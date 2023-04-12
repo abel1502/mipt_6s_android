@@ -24,7 +24,7 @@ class RestaurantRepository @Inject constructor(
 
     suspend fun fetchCatalog(): Flow<CatalogResponse> {
         return flow {
-            if (!restaurantDao.isEmpty()) {
+            if (restaurantDao.isNonEmpty()) {
                 val response = CatalogResponse(
                     nearest = restaurantDao.getCategoryRestaurants("nearest")
                         .map { it.toRemoteRestaurant() },
