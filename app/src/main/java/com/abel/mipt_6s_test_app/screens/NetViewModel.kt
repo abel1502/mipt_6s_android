@@ -63,13 +63,14 @@ class NetViewModel @Inject constructor(private val repository: RestaurantReposit
 
     private fun fetchRestaurants() {
         viewModelScope.launch(Dispatchers.IO) {
-            val catalog = repository.fetchCatalog()
-
-            _viewState.value = _viewState.value.copy(
-                nearestRestaurants = catalog.nearest.map { Restaurant.fromRemote(it) },
-                popularRestaurants = catalog.popular.map { Restaurant.fromRemote(it) },
-                commercial = Commercial.fromRemote(catalog.commercial),
-            )
+            repository.fetchCatalog()
+                .collectLatest { catalog ->
+                    _viewState.value = _viewState.value.copy(
+                        nearestRestaurants = catalog.nearest.map { Restaurant.fromRemote(it) },
+                        popularRestaurants = catalog.popular.map { Restaurant.fromRemote(it) },
+                        commercial = Commercial.fromRemote(catalog.commercial),
+                    )
+                }
         }
     }
 }
