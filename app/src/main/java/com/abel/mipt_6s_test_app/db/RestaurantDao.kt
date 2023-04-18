@@ -3,6 +3,7 @@ package com.abel.mipt_6s_test_app.db
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
@@ -20,10 +21,10 @@ interface RestaurantDao {
     @Query("SELECT * FROM commercial LIMIT 1")
     fun getCommercial(): CommercialEntity
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg restaurants: RestaurantEntity)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(commercial: CommercialEntity)
 
     @Delete

@@ -3,14 +3,14 @@ package com.abel.mipt_6s_test_app.screens
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.abel.mipt_6s_test_app.net.CatalogResponse
-import com.abel.mipt_6s_test_app.net.RestaurantRepository
+import androidx.navigation.NavController
+import com.abel.mipt_6s_test_app.data.NavParamsCache
+import com.abel.mipt_6s_test_app.data.RestaurantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +18,7 @@ import javax.inject.Inject
 sealed class NetEvent {
     data class CommercialClicked(val url: String) : NetEvent()
     data class SwitchSection(val section: NetViewState.Section) : NetEvent()
+    data class RestaurantClicked(val restaurant: Restaurant) : NetEvent()
 }
 
 
@@ -46,6 +47,12 @@ class NetViewModel @Inject constructor(private val repository: RestaurantReposit
     private val _viewState = MutableStateFlow(NetViewState())
     val viewState: StateFlow<NetViewState> = _viewState
 
+    private var _navController: NavController? = null
+
+    fun setNavController(navController: NavController?) {
+        _navController = navController
+    }
+
     init {
         fetchRestaurants()
     }
@@ -57,6 +64,9 @@ class NetViewModel @Inject constructor(private val repository: RestaurantReposit
             }
             is NetEvent.SwitchSection -> {
                 _viewState.value = _viewState.value.copy(curSection = event.section)
+            }
+            is NetEvent.RestaurantClicked -> {
+                expandDetails(event.restaurant)
             }
         }
     }
@@ -72,5 +82,13 @@ class NetViewModel @Inject constructor(private val repository: RestaurantReposit
                     )
                 }
         }
+    }
+
+    private fun expandDetails(restaurant: Restaurant) {
+        val id = NavParamsCache.put(restaurant)
+
+        _navController?.navigate(
+            "details/${id}"
+        )
     }
 }

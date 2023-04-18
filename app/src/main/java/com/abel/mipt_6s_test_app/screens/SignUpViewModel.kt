@@ -2,6 +2,7 @@ package com.abel.mipt_6s_test_app.screens
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,6 +16,7 @@ sealed class SignUpEvent {
     object PasswordShownChanged : SignUpEvent()
     object Submit : SignUpEvent()
     object AlreadyHaveAccount : SignUpEvent()
+    object PopupShown : SignUpEvent()
 }
 
 
@@ -25,12 +27,19 @@ data class SignUpViewState(
     val keepSignedIn: Boolean = true,
     val emailMe: Boolean = true,
     val passwordShown: Boolean = false,
+    val popupMessage: String? = null,
 )
 
 
 class SignUpViewModel : ViewModel() {
     private val _viewState = MutableStateFlow(SignUpViewState())
     val viewState: StateFlow<SignUpViewState> = _viewState
+
+    private var _navController: NavController? = null
+
+    fun setNavController(navController: NavController?) {
+        _navController = navController
+    }
 
     fun obtainEvent(event: SignUpEvent) {
         when (event) {
@@ -56,12 +65,28 @@ class SignUpViewModel : ViewModel() {
                 doSubmit()
             }
             SignUpEvent.AlreadyHaveAccount -> {
-                Log.i("SignUpViewModel", "Already have account")
+                doAlreadyHaveAccount()
+            }
+            SignUpEvent.PopupShown -> {
+                _viewState.value = _viewState.value.copy(popupMessage = null)
             }
         }
     }
 
     private fun doSubmit() {
         Log.i("SignUpViewModel", "form submitted: ${_viewState.value}")
+
+        _navController?.navigate("main")
+    }
+
+    private fun doAlreadyHaveAccount() {
+        Log.i("SignUpViewModel", "Already have account")
+
+        showPopup("I'll trust you :)")
+        _navController?.navigate("main")
+    }
+
+    private fun showPopup(message: String) {
+        _viewState.value = _viewState.value.copy(popupMessage = message)
     }
 }

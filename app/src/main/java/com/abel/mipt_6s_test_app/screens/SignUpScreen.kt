@@ -1,5 +1,6 @@
 package com.abel.mipt_6s_test_app.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +18,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -29,7 +31,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.abel.mipt_6s_test_app.R
 import com.abel.mipt_6s_test_app.ui.theme.GreenBright
 import com.abel.mipt_6s_test_app.ui.theme.GreenGradientBrush
@@ -37,9 +42,22 @@ import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
 
 
 @Composable
-fun SignUpScreen() {
-    val viewModel: SignUpViewModel = viewModel()
+fun SignUpScreen(viewModel: SignUpViewModel, navController: NavController) {
     val viewState by viewModel.viewState.collectAsState()
+    val localContext = LocalContext.current
+
+    LaunchedEffect(viewModel) {
+        viewModel.setNavController(navController)
+    }
+
+    LaunchedEffect(viewState.popupMessage) handler@{
+        if (viewState.popupMessage == null)
+            return@handler
+
+        Toast.makeText(localContext, viewState.popupMessage, Toast.LENGTH_SHORT).show()
+
+        viewModel.obtainEvent(SignUpEvent.PopupShown)
+    }
 
     SignUpView(
         viewState,
@@ -346,6 +364,9 @@ private fun SignUpSubmit(
 @Composable
 fun Task1Preview() {
     TestAppTheme {
-        SignUpScreen()
+        SignUpView(
+            viewState = SignUpViewState(),
+            eventHandler = {},
+        )
     }
 }

@@ -3,7 +3,7 @@ package com.abel.mipt_6s_test_app.db
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.abel.mipt_6s_test_app.net.RemoteRestaurant
+import com.abel.mipt_6s_test_app.data.RemoteRestaurant
 
 @Entity(tableName = "restaurants")
 data class RestaurantEntity(

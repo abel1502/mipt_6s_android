@@ -1,4 +1,4 @@
-package com.abel.mipt_6s_test_app.net
+package com.abel.mipt_6s_test_app.data
 
 import kotlinx.serialization.Serializable
 

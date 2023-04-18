@@ -16,6 +16,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
@@ -36,16 +39,21 @@ import com.abel.mipt_6s_test_app.ui.theme.TestAppTheme
 
 
 @Composable
-fun NetScreen() {
-    val viewModel: NetViewModel = viewModel()
+fun NetScreen(
+    viewModel: NetViewModel,
+    navController: NavController,
+) {
     val viewState by viewModel.viewState.collectAsState()
+
+    LaunchedEffect(viewModel) {
+        viewModel.setNavController(navController)
+    }
 
     NetView(
         viewState,
         eventHandler = { viewModel.obtainEvent(it) },
     )
 }
-
 
 // region Helpers
 @Composable
@@ -124,7 +132,8 @@ fun NetRestaurantCard(
     Card(
         modifier = Modifier
             .height(120.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { eventHandler(NetEvent.RestaurantClicked(model)) },
     ) {
         Row(
             modifier = Modifier
@@ -187,6 +196,9 @@ fun NetLoadedImage(
 @Composable
 fun NetScreenPreview() {
     TestAppTheme {
-        NetScreen()
+        NetView(
+            viewState = NetViewState(),
+            eventHandler = {},
+        )
     }
 }
